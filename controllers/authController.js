@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 exports.register = async (req, res) => {
     const { username, email, password } = req.body;
 
+    console.log(req.body);
     try {
         let user = await User.findOne({ email });
         if (user) return res.status(400).json({ msg: 'User already exists' });
@@ -14,6 +15,9 @@ exports.register = async (req, res) => {
 
         const payload = { user: { id: user.id } };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        console.log(token);
+        console.log(user)
 
         res.json({ token });
     } catch (error) {
