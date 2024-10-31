@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Session = require('../models/Session');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -44,4 +45,19 @@ exports.login = async (req, res) => {
         console.error(error.message);
         res.status(500).send('Server error');
     }
+};
+
+exports.getSessionInstance = async (req, res) => {
+  try {
+    const session = await Session.findOne({ userId: req.user.id });
+
+    if (!session) {
+      return res.status(404).json({ msg: 'Session not found' });
+    }
+
+    res.json({ instanceIP: session.instanceIP, taskArn: session.taskArn });
+  } catch (error) {
+    console.error('Error retrieving session:', error);
+    res.status(500).send('Server error');
+  }
 };
