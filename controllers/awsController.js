@@ -129,14 +129,11 @@ async function getPublicIPFromENI(networkInterfaceId) {
 }
 
 
-// Para uma instância ECS de um usuário específico e remove o mapeamento do MongoDB
 exports.stopInstance = async (req, res) => {
   try {
     const session = await Session.findOne({ userId: req.user.id });
     if (!session) {
-      return res
-        .status(404)
-        .json({ message: "No active instance found for user" });
+      return res.status(404).json({ message: "No active instance found for user" });
     }
 
     const stopCommand = new StopTaskCommand({
@@ -145,7 +142,10 @@ exports.stopInstance = async (req, res) => {
     });
     await ecsClient.send(stopCommand);
 
-    await Session.deleteOne({ userId: req.user.id });
+    // Atualiza o status da sessão no banco em vez de deletar
+    session.status = 'STOPPED';
+    await session.save();
+
     res.json({ message: "Instance stopped successfully" });
   } catch (error) {
     console.error("Error stopping instance:", error);
@@ -199,6 +199,7 @@ exports.instanceStatus = async (req, res) => {
       taskArn: session.taskArn,
       instanceIP: session.instanceIP,
       lastActive: session.lastActive,
+      status: session.status
     });
   } catch (error) {
     console.error("Error fetching instance status:", error);
