@@ -27,7 +27,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/challenges', require('./routes/challengeRoutes'));
 app.use('/api/ranking', require('./routes/rankingRoutes'));
-app.use('/api/instances', require('./routes/awsRoutes'));
+app.use('/api/aws', require('./routes/awsRoutes'));
   
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
