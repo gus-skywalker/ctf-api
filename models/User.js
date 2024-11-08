@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
     avatar: { type: String, required: true },
     ipAddress: { type: String },
     score: { type: Number, default: 0 },
-    role: { type: String, required: true}
+    role: { type: String, default: 'user'}
 });
 
 // Hashing password before saving
@@ -17,7 +17,6 @@ UserSchema.pre('save', async function (next) {
     if (!this.isModified('password')) next();
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    this.role = 'user';
     next();
 });
 

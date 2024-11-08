@@ -1,11 +1,12 @@
 const express = require('express');
-const { getChallenges, submitFlag } = require('../controllers/challengeController');
+const { getChallenges, getChallengesWithStatus, submitFlag, createChallenge } = require('../controllers/challengeController');
 const auth = require('../middleware/authMiddleware');
 const adminAuth = require('../middleware/adminAuthMiddleware')
 const router = express.Router();
 
 router.get('/', auth, getChallenges);
-router.post('/submit/:id/submit', auth, submitFlag);
-router.post('/challenges', auth, adminAuth, challengeController.createChallenge);
+router.get('/status', auth, getChallengesWithStatus);
+router.post('/:id/validate', auth, submitFlag);
+router.post('/', auth, adminAuth, createChallenge);
 
 module.exports = router;
