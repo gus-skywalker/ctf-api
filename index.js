@@ -5,7 +5,7 @@ const app = express();
 const connectDB = require('./config/db');
 require('dotenv').config();
 
-const allowedOrigins = ['http://localhost:4000', 'https://ctf.lesmonades.com', 'http://ctf.lesmonades.com'];
+const allowedOrigins = ['http://localhost:4000', 'http://localhost:5173', 'https://ctf.lesmonades.com', 'http://ctf.lesmonades.com'];
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
