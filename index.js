@@ -5,7 +5,7 @@ const app = express();
 const connectDB = require('./config/db');
 require('dotenv').config();
 
-const allowedOrigins = ['http://localhost:5173', 'http://seu-site-de-producao.com'];
+const allowedOrigins = ['http://localhost:4000', 'https://ctf.lesmonades.com'];
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -29,6 +29,6 @@ app.use('/api/challenges', require('./routes/challengeRoutes'));
 app.use('/api/ranking', require('./routes/rankingRoutes'));
 app.use('/api/aws', require('./routes/awsRoutes'));
   
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 4001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
