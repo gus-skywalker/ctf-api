@@ -2,7 +2,10 @@ const User = require('../models/User');
 
 exports.getRanking = async (req, res) => {
     try {
-        const users = await User.find().sort({ score: -1 }).limit(10);
+        const users = await User.find()
+            .sort({ score: -1 })
+            .limit(10)
+            .select('id username avatar score');
         res.json(users);
     } catch (error) {
         console.error(error.message);
