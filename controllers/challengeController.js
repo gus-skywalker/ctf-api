@@ -110,3 +110,27 @@ exports.createChallenge = async (req, res) => {
     }
 };
 
+exports.deleteChallenge = async (req, res) => {
+    const { id: challengeId } = req.params;
+
+    try {
+        // Verifica se o desafio existe
+        const challenge = await Challenge.findById(challengeId);
+        if (!challenge) {
+            return res.status(404).json({ msg: 'Challenge not found' });
+        }
+
+        // Remove as submissões associadas ao desafio
+        await Submission.deleteMany({ challenge: challengeId });
+
+        // Remove o desafio
+        await Challenge.findByIdAndDelete(challengeId);
+
+        res.json({ msg: 'Challenge deleted successfully' });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server error');
+    }
+};
+
+
