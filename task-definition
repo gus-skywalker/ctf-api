@@ -1,0 +1,25 @@
+aws ecs create-service \
+  --cluster my-ecs-cluster \
+  --service-name my-service \
+  --task-definition my-task-family \
+  --desired-count 1 \
+  --launch-type FARGATE \
+  --network-configuration '{
+      "awsvpcConfiguration": {
+        "subnets": ["subnet-0ed0639dcd337ba78", "subnet-061871512377fcc9d", "subnet-0bef7688e5777b10e"],
+        "securityGroups": ["sg-0123456789abcdef0"],
+        "assignPublicIp": "ENABLED"
+      }
+    }' \
+  --load-balancers '[
+      {
+        "targetGroupArn": "arn:aws:elasticloadbalancing:sa-east-1:123456789012:targetgroup/http-target-group/abcdef123456",
+        "containerName": "my-container",
+        "containerPort": 80
+      },
+      {
+        "targetGroupArn": "arn:aws:elasticloadbalancing:sa-east-1:123456789012:targetgroup/modbus-target-group/abcdef123456",
+        "containerName": "my-container",
+        "containerPort": 5020
+      }
+    ]'

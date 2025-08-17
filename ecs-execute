@@ -1,0 +1,29 @@
+aws ecs execute-command \
+  --cluster arn:aws:ecs:sa-east-1:858413359195:cluster/CTFCluster \
+  --task arn:aws:ecs:sa-east-1:858413359195:task/CTFCluster/f2543f7830b24cb3a08d2f5331f5bc82 \
+  --container scada-modbus-ctf-container \
+  --command "/bin/sh" \
+  --interactive
+
+aws ecs run-task \
+  --cluster arn:aws:ecs:sa-east-1:858413359195:cluster/CTFCluster \
+  --task-definition arn:aws:ecs:sa-east-1:858413359195:task-definition/scada-modbus-ctf-task:2 \
+  --launch-type FARGATE \
+  --network-configuration "awsvpcConfiguration={subnets=['subnet-0ed0639dcd337ba78','subnet-061871512377fcc9d'],securityGroups=['sg-077ac2eaa968033d7'],assignPublicIp='ENABLED'}" \
+  --enable-execute-command
+
+aws ecs update-service \
+  --cluster arn:aws:ecs:sa-east-1:858413359195:cluster/CTFCluster \
+  --service arn:aws:ecs:sa-east-1:858413359195:service/CTFCluster/ctf-service \
+  --force-new-deployment \
+  --enable-execute-command
+
+aws ecs update-service \
+  --cluster arn:aws:ecs:sa-east-1:858413359195:cluster/CTFCluster \
+  --service arn:aws:ecs:sa-east-1:858413359195:service/CTFCluster/ctf-service \
+  --task-definition arn:aws:ecs:sa-east-1:858413359195:task-definition/scada-modbus-ctf-task:2 \
+  --force-new-deployment \
+  --enable-execute-command
+
+arn:aws:iam::858413359195:role/scada-modbus-ctf-task-role
+arn:aws:ecs:sa-east-1:858413359195:task-definition/scada-modbus-ctf-task:2
